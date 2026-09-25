@@ -1,0 +1,41 @@
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.net.ServerSocket;
+import java.net.Socket;
+import java.util.function.Consumer;
+
+public class MultiServer {
+
+    public Consumer<Socket> getConsumer(){
+        return(clientSocket)->{
+            try{
+                PrintWriter toClient = new PrintWriter(clientSocket.getOutputStream());
+                toClient.println("Hello from the server");
+                toClient.close();
+                clientSocket.close();
+            }catch(IOException ex){
+                ex.printStackTrace();
+            }
+        };
+    }
+
+    public static void main() {
+        int port = 8010;
+        // It is size of the socket that how much it can handle
+        int backlog = 1000;
+        MultiServer server = new MultiServer();
+
+        try{
+            ServerSocket serverSocket = new ServerSocket(port,backlog);
+            serverSocket.setSoTimeout(10000);
+            while(true){
+                Socket accpetedSocket = serverSocket.accept();
+                Thread thread = new Thread(()-> server.getConsumer().accept(accpetedSocket));
+                thread.start();
+            }
+        }catch(IOException ex){
+            ex.printStackTrace();
+        }
+
+    }
+}
