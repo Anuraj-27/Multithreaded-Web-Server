@@ -19,7 +19,7 @@ public class MultiServer {
         };
     }
 
-    public static void main() {
+    public static void main(String[] args) {
         int port = 8010;
         // It is size of the socket that how much it can handle
         int backlog = 1000;

@@ -33,7 +33,7 @@ public class MultiClient {
         };
     }
 
-    public static void main() {
+    public static void main(String[] args) {
         MultiClient client = new MultiClient();
         for(int i=0 ; i<100 ; i++){
             Thread thread = new Thread(client.getRunnable());
